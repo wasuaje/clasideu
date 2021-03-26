@@ -1,0 +1,71 @@
+#!/bin/bash
+
+
+EXPECTED_ARGS=3
+E_BADARGS=65
+
+
+#Verifico que se envie el numero correcto de parametros
+
+if [ $# -ne $EXPECTED_ARGS ]
+then
+  echo "Utilizacion: `basename $0` {Activar|Desactivar tipo_de_archivo valor_de_busqueda}"
+  exit $E_BADARGS
+fi
+
+# si son el nro correcto de params, los asigno a variables
+ACCION=$1
+TIPO=$2
+VALOR=$3
+
+#segun el parametro escojo el archivo de configuracion a editar
+case "$2" in
+    micrositio)
+    #echo "Parameter was micrositio"
+    FILE=micrositiosInactivos.conf
+    ;;
+
+    proyecto)
+    #echo "Parameter was proyecto"
+    FILE=proyectosInactivos.conf
+    ;;
+    
+    *)
+    echo "Utilizacion: `basename $0` {micrositio|proyecto}"
+    exit 1	
+    ;;
+esac
+
+#busco nro de concidencias del valor buscado debe ser solo 1 para  porder desactivar
+
+COINCIDENCIAS=`sed -n /$VALOR/p $FILE | wc -l`
+#echo "sed -n /$VALOR/p $FILE"
+
+#A=activar micrositio/proyecto, D=desactivar micrositio proyecto
+case "$1" in
+   A)
+	if [ $TIPO = micrositio ]	
+	then
+	    echo "RewriteRule ^/micrositio/$VALOR/.*$ http://clasificados.eluniversal.com/inmuebles/micrositios.shtml [R,L]" >> $FILE
+	fi
+
+        if [ $TIPO = proyecto ]  
+        then
+            echo "RewriteRule ^/micrositio/casagroup/$VALOR.*$ http://clasificados.eluniversal.com/inmuebles/nuevosproyectos.shtml [R,L]" >> $FILE
+        fi
+   ;;
+   D)
+   #sino se consigue el texto o  el texto devuelve mas de una coincidencia salimos
+   if [ $COINCIDENCIAS -gt 1 -o $COINCIDENCIAS -lt 1 ]
+    then
+    echo "La busqueda arroja '$COINCIDENCIAS' valor(es) debe ser igual a 1 "
+    exit 1 
+   fi
+   #sino si se consigue un solo valor procedemos a borrarlo
+    sed -n /$VALOR/d $FILE 
+
+   ;;
+esac
+
+
+

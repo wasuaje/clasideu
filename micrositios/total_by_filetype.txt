@@ -1,0 +1,4 @@
+      4 ASCII
+      3 Bourne-Again
+      2 empty
+      1 Zip

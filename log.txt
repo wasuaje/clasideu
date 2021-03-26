@@ -1,0 +1,8 @@
+el directorio a crear es: Febrero_2014
+el directorio a Comprimir es: Enero_2014
+El DIRECTORIO YA EXISTE Febrero_2014
+Archivo a comprimir ZIP: Diciembre_2013.zip
+Se comparte la carpeta creada Febrero_2014
+Se comienza a modificar el archivo copia_a.bat del mes Enero_2014
+Se modifico el archivo copia_a.bat al mes Febrero_2014
+Se envia el mensaje de finalizacion 
